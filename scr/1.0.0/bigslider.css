@@ -1,0 +1,169 @@
+.bigslider {
+    -webkit-transition: height .2s;
+    -o-transition: height .2s;
+    transition: height .2s;
+    width: 100%;
+}
+
+.bigslider > .wrapper,
+.bigslider .slides,
+.bigslider .slide {
+    height: 100%;
+}
+
+
+.bigslider > .wrapper {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.bigslider .goto {
+    position: absolute;
+    top: 50%;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,.25);
+	box-shadow: 0 1px 4px 0 rgba(0,0,0,.25);
+    color: #fff;
+    cursor: pointer;
+    height: 30px;
+    line-height: 30px;
+    opacity: .75;
+    text-align: center;
+    -webkit-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+    width: 30px;
+    z-index: 100;
+}
+
+.bigslider .goto:hover {
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0,0,0,.5);
+	box-shadow: 0 3px 8px 0 rgba(0,0,0,.5);
+    opacity: 1;
+}
+
+.bigslider .goto[step="-1"] {
+    left: 10px;
+}
+
+.bigslider .goto[step="1"] {
+    right: 10px;
+}
+
+.bigslider .goto i {
+    position: relative;
+    font-size: 1.2em;
+}
+
+.bigslider .goto[step="-1"] i {
+    left: -1px;
+}
+
+.bigslider .goto[step="1"] i {
+    left: 1px;
+}
+
+.bigslider .slides {
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-box-align: start;
+	-ms-flex-align: start;
+	align-items: flex-start;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-transition: left .2s ease-in;
+    -o-transition: left .2s ease-in;
+    transition: left .2s ease-in;
+}
+
+.bigslider .slide {
+    display: block;
+    opacity: 1;
+    -webkit-transition: opacity .2s;
+    -o-transition: opacity .2s;
+    transition: opacity .2s;
+}
+
+.bigslider .slide img {
+    display: block;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+.bigslider .slide.not-ready {
+    opacity: 0;
+}
+
+.bigslider .indicator {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    -webkit-box-align: center;
+	-ms-flex-align: center;
+	align-items: center;
+    background-color: transparent;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    height: 40px;
+    -webkit-box-pack: center;
+	-ms-flex-pack: center;
+	justify-content: center;
+    width: 100%;
+}
+
+.bigslider .indicator .dot {
+    background-color: #fff;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 1px 4px 0 rgba(0,0,0,.25);
+	box-shadow: 0 1px 4px 0 rgba(0,0,0,.25);
+    cursor: pointer;
+    height: 10px;
+    opacity: .75;
+    width: 10px;
+}
+
+.bigslider .indicator .dot:hover {
+    -webkit-box-shadow: 0 3px 8px 0 rgba(0,0,0,.5);
+	box-shadow: 0 3px 8px 0 rgba(0,0,0,.5);
+    opacity: 1;
+}
+
+.bigslider .indicator .dot:not(:last-child) {
+    margin-right: 10px;
+}
+
+.bigslider .indicator .dot[current="1"] {
+    background-color: #0b7bba;
+}
+
+.bigslider .progress,
+.bigslider .progress .bar {
+    position: absolute;
+    top: 0;
+}
+
+.bigslider .progress {
+    left: 0;
+    height: 2px;
+    width: 100%;
+    z-index: 10;
+}
+
+.bigslider .progress .inner {
+    position: relative;
+    height: 100%;
+    width: 100%;
+}
+
+.bigslider .progress .bar {
+    right: 0;
+    background-color: #f8c20a;
+    height: 100%;
+    width: 100%;
+}
