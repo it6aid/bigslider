@@ -128,12 +128,26 @@ BigSlider.prototype.init = function () {
 			slide.classList.add('not-ready');
 			slide.setAttribute('current', this.current === i ? 1 : 0);
 
-			this.break_points.forEach(function (break_point) {
-                if (slide.getAttribute('data-img-' + break_point)) {
-                	_this.slides[i].images[break_point] = slide.getAttribute('data-img-' + break_point);
-                }
-            });
+			if (this.break_points.length) {
+				this.break_points.forEach(function (break_point) {
+					if (slide.getAttribute('data-img-' + break_point)) {
+						_this.slides[i].images[break_point] = slide.getAttribute('data-img-' + break_point);
+					}
+				});
+			} else {
+				for (var p = 0; p < slide.attributes.length; p ++) {
+					var attr = slide.attributes[p], break_point;
+					if (/^data-img-(\d+)$/gi.test(attr.name)) {
+						break_point = parseInt(attr.name.replace('data-img-', ''));
+						if (this.break_points.indexOf(break_point) === -1) {
+							this.break_points.push(break_point);
+							this.slides[i].images[break_point] = attr.value;
+						}
+					}
+				}
+			}
 			this.break_points.sort(function (a, b) {return a - b});
+			console.log(this.slides);
 
 			dot.addEventListener('click', function (e) {
                 _this.gotoSlide(parseInt(e.currentTarget.getAttribute('slide')));
