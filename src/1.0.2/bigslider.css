@@ -96,20 +96,29 @@
     -webkit-transform: scale(2);
     -ms-transform: scale(2);
     transform: scale(2);
-    -webkit-transition: opacity .4s, z-index .4s, -webkit-transform .4s;
-    transition: opacity .4s, z-index .4s, -webkit-transform .4s;
-    -o-transition: opacity .4s, transform .4s, z-index .4s;
-    transition: opacity .4s, transform .4s, z-index .4s;
-    transition: opacity .4s, transform .4s, z-index .4s, -webkit-transform .4s;
-    z-index: -1;
+    -webkit-transition: opacity .4s, visibility .4s, -webkit-filter .4s, -webkit-transform .4s;
+    transition: opacity .4s, visibility .4s, -webkit-filter .4s, -webkit-transform .4s;
+    -o-transition: filter .4s, opacity .4s, transform .4s, visibility .4s;
+    transition: filter .4s, opacity .4s, transform .4s, visibility .4s;
+    transition: filter .4s, opacity .4s, transform .4s, visibility .4s, -webkit-filter .4s, -webkit-transform .4s;
+    visibility: hidden;
+    z-index: 1;
 }
 
 .bigslider[animation="dropin"] .slide[active] {
+    -webkit-filter: blur(0);
+            filter: blur(0);
     opacity: 1;
     -webkit-transform: scale(1);
     -ms-transform: scale(1);
     transform: scale(1);
-    z-index: 1;
+    -webkit-transition: opacity .4s, visibility 0s, -webkit-filter .4s, -webkit-transform .4s;
+    transition: opacity .4s, visibility 0s, -webkit-filter .4s, -webkit-transform .4s;
+    -o-transition: filter .4s, opacity .4s, transform .4s, visibility 0s;
+    transition: filter .4s, opacity .4s, transform .4s, visibility 0s;
+    transition: filter .4s, opacity .4s, transform .4s, visibility 0s, -webkit-filter .4s, -webkit-transform .4s;
+    visibility: visible;
+    z-index: 2;
 }
 
 .bigslider .slide img {
