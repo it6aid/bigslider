@@ -46,6 +46,15 @@ function BigSlider (selector) {
         });
     }
 
+	if (this.slider.getAttribute('animation')) {
+		if (['dropin', 'slide'].indexOf(this.slider.getAttribute('animation')) > -1) {
+			this.animation = this.slider.getAttribute('animation');
+		} else {
+			this.animation = 'slide';
+			this.slider.setAttribute('animation', 'slide');
+		}
+	}
+
 	this.goto_left.innerHTML = '<i class="icon-left-arrow"></i>';
 	this.goto_right.innerHTML = '<i class="icon-right-arrow"></i>';
 
@@ -107,7 +116,21 @@ BigSlider.prototype.gotoSlide = function (n) {
 		_this.moving = false;
 		clearTimeout(timeout_id);
 	}, 200);
-	this.container.style.left = '-' + (n * width) + 'px';
+
+	switch (this.animation) {
+		case 'dropin':
+			for (var d in this.slides) {
+				if (n === parseInt(d)) {
+					this.slides[d].el.setAttribute('active', '');
+				} else {
+					this.slides[d].el.removeAttribute('active');
+				}
+			}
+			break;
+		case 'slide':
+			this.container.style.left = '-' + (n * width) + 'px';
+			break;
+	}
 	for (var i = 0; i < dots.length; i++) {
 		if (parseInt(dots[i].getAttribute('slide')) === n) {
 			dots[i].setAttribute('current', 1);
@@ -147,7 +170,7 @@ BigSlider.prototype.init = function () {
 				}
 			}
 			this.break_points.sort(function (a, b) {return a - b});
-			console.log(this.slides);
+			this.slider.setAttribute('break-points', this.break_points.join(','));
 
 			dot.addEventListener('click', function (e) {
                 _this.gotoSlide(parseInt(e.currentTarget.getAttribute('slide')));
@@ -251,7 +274,14 @@ BigSlider.prototype.setTimer = function () {
 BigSlider.prototype.size = function (cb) {
 	var current_point = this.getCurrentPoint(), rect = this.slider.getBoundingClientRect(),
         current_height = 0, _this = this;
-	this.wrapper.querySelector('.slides').style.width = (Object.keys(this.slides).length * rect.width) + 'px';
+	switch (this.animation) {
+		case 'dropin':
+			this.wrapper.querySelector('.slides').style.width = rect.width + 'px';
+			break;
+		case 'slide':
+			this.wrapper.querySelector('.slides').style.width = (Object.keys(this.slides).length * rect.width) + 'px';
+			break;
+	}
 	for (var i in this.slides) {
 		var each = this.slides[i], slide = each.el,
             img = slide.querySelector('[point="' + current_point + '"]') || slide.querySelector('img'),
