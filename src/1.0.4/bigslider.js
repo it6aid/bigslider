@@ -235,13 +235,15 @@ BigSlider.prototype.loadImages = function () {
     }
 };
 
+/**
+ * Set up mutation observer
+ */
 BigSlider.prototype.observe = function () {
 	var _this = this, config = {attributes: true},
 		callback = function(list, observer) {
 			for (var i = 0; i < list.length; i ++) {
 				var mutation = list[i];
 				if (mutation.type === 'attributes') {
-					console.log('The ' + mutation.attributeName + ' attribute was modified.');
 					switch (mutation.attributeName) {
 						case 'current':
 							var value = parseInt(mutation.target.getAttribute('current'));
