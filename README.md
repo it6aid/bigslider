@@ -2,10 +2,13 @@
 Simple responsive slider
 
 # Changes
+### 1.0.2 - 1.0.3
+- Minus bug fixes
+- Change `current` attribute observer
 ### 1.0.1 - 1.0.2
 Add animation support
 ### 1.0.0 - 1.0.1
-Add support to generate `break-points` attribute from `data-img` attributes if not defined to prevent empty slides.
+Add support to generate `break-points` attribute from `data-img` attributes if not defined to prevent empty slides
 
 # Installation
 ```html
@@ -48,6 +51,7 @@ Add support to generate `break-points` attribute from `data-img` attributes if n
 | Attribute | Example | Required | Notes |
 | ------------- |:-------------:| :-----:| -----:|
 | class | `bigslider` | Yes | For JS and CSS to work properly |
+| current | `1` | No | This attribute is generated after initialisation. Change the value of this attribute will trigger the slide change | 
 | use-indicator | `1` or `0` | No | Enables dot indicator at the bottom. On default no indicator will be rendered |
 | use-navigation | `1` or `0` | No | Enables left and right arrows at left and right sides. On default no navigation will be rendered |
 | break-points | `320,768,960,1160` | No | Break points of `window.innerWidth` to switch slide image. If defined, this must match the `data-img` attribute |

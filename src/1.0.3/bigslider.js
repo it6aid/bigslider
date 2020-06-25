@@ -53,6 +53,9 @@ function BigSlider (selector) {
 			this.animation = 'slide';
 			this.slider.setAttribute('animation', 'slide');
 		}
+	} else {
+		this.animation = 'slide';
+		this.slider.setAttribute('animation', 'slide');
 	}
 
 	this.goto_left.innerHTML = '<i class="icon-left-arrow"></i>';
@@ -96,6 +99,7 @@ BigSlider.prototype.getCurrentPoint = function () {
 };
 
 BigSlider.prototype.gotoSlide = function (n) {
+	if (this.current == n) return;
 	var width = this.slider.getBoundingClientRect().width,
         total = Object.keys(this.slides).length,
         dots = this.indicator.querySelectorAll('.dot'),
@@ -113,6 +117,7 @@ BigSlider.prototype.gotoSlide = function (n) {
 			_this.current_time = new Date().getTime();
 		}
 		_this.current = n;
+		_this.slider.setAttribute('current', n);
 		_this.moving = false;
 		clearTimeout(timeout_id);
 	}, 200);
@@ -190,6 +195,8 @@ BigSlider.prototype.init = function () {
             });
         });
     });
+
+	this.observe();
 };
 
 BigSlider.prototype.loadImage = function (point, src, slide, cb) {
@@ -226,6 +233,30 @@ BigSlider.prototype.loadImages = function () {
             });
         }
     }
+};
+
+BigSlider.prototype.observe = function () {
+	var _this = this, config = {attributes: true},
+		callback = function(list, observer) {
+			for (var i = 0; i < list.length; i ++) {
+				var mutation = list[i];
+				if (mutation.type === 'attributes') {
+					console.log('The ' + mutation.attributeName + ' attribute was modified.');
+					switch (mutation.attributeName) {
+						case 'current':
+							var value = parseInt(mutation.target.getAttribute('current'));
+							if (!isNaN(value) && value !== this.current) {
+								_this.gotoSlide(value);
+							}
+							break;
+						default:
+							break;
+					}
+				}
+			}
+		};
+		observer = new MutationObserver(callback);
+	observer.observe(this.slider, config);
 };
 
 BigSlider.prototype.setDisplay = function (cb) {
