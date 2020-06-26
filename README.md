@@ -1,4 +1,4 @@
-# BigSlider 1.0.2
+# BigSlider 1.0.5
 Simple responsive slider
 
 # Changes
