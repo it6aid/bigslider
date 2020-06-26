@@ -1,7 +1,10 @@
-# BigSlider 1.0.5
+# BigSlider 1.0.6
 Simple responsive slider
 
 # Changes
+### 1.0.5 - 1.0.6
+- Fix memory leaks from a global variable
+- Remove logs
 ### 1.0.3 - 1.0.5
 - Memory leak fixes
 - Remove `start` attribute support
@@ -9,9 +12,9 @@ Simple responsive slider
 - Minus bug fixes
 - Change `current` attribute observer
 ### 1.0.1 - 1.0.2
-Add animation support
+- Add animation support
 ### 1.0.0 - 1.0.1
-Add support to generate `break-points` attribute from `data-img` attributes if not defined to prevent empty slides
+- Add support to generate `break-points` attribute from `data-img` attributes if not defined to prevent empty slides
 
 # Installation
 ```html

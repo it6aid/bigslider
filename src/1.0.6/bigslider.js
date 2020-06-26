@@ -1,3 +1,5 @@
+'use strict';
+
 function BigSlider (selector) {
 	var _this = this;
 
@@ -258,7 +260,7 @@ BigSlider.prototype.observe = function () {
 					}
 				}
 			}
-		};
+		},
 		observer = new MutationObserver(callback);
 	observer.observe(this.slider, config);
 };
@@ -302,7 +304,6 @@ BigSlider.prototype.setTimer = function () {
 			if (percentage < 0) percentage = 0;
 			bar.style.width = percentage + '%';
 			if (now - _this.current_time > _this.autoplay) {
-				console.log('i m called');
 				_this.gotoSlide(_this.current + 1);
 			}
 		}
