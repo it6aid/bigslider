@@ -35,10 +35,11 @@ function BigSlider (selector) {
         }
     }
 
-	if (this.slider.getAttribute('start') !== null) {
-		this.slider.setAttribute('current', this.slider.getAttribute('start'));
-		this.current = parseInt(this.slider.getAttribute('start'));
-    }
+	if (this.slider.getAttribute('current') !== null && !isNaN(this.slider.getAttribute('current'))) {
+		this.current = parseInt(this.slider.getAttribute('current'));
+    } else {
+		this.slider.setAttribute('current', this.current);
+	}
 
 	if (this.slider.getAttribute('break-points')) {
 		this.slider.getAttribute('break-points').split(',').forEach(function (each) {
@@ -98,8 +99,8 @@ BigSlider.prototype.getCurrentPoint = function () {
 	return current_point;
 };
 
-BigSlider.prototype.gotoSlide = function (n) {
-	if (this.current == n) return;
+BigSlider.prototype.gotoSlide = function (n, force) {
+	if (this.current == n && (typeof force === 'boolean' && force === false)) return;
 	var width = this.slider.getBoundingClientRect().width,
         total = Object.keys(this.slides).length,
         dots = this.indicator.querySelectorAll('.dot'),
@@ -110,6 +111,7 @@ BigSlider.prototype.gotoSlide = function (n) {
 		if (n < 0) n = (total - 1);
     }
 
+	// Moving means animation not finished, then cancel
 	if (this.moving) return;
 	this.moving = true;
 	var timeout_id = setTimeout(function () {
@@ -120,7 +122,7 @@ BigSlider.prototype.gotoSlide = function (n) {
 		_this.slider.setAttribute('current', n);
 		_this.moving = false;
 		clearTimeout(timeout_id);
-	}, 200);
+	}, 200); // CSS transition duration .2s
 
 	switch (this.animation) {
 		case 'dropin':
@@ -148,6 +150,7 @@ BigSlider.prototype.gotoSlide = function (n) {
 BigSlider.prototype.init = function () {
 	var slides = this.slider.querySelectorAll('.slides .slide'), _this = this;
 	this.slides = {};
+	if (this.current > slides.length - 1) this.current = 0;
 	if (slides.length) {
 		for (var i = 0; i < slides.length; i ++) {
 			var dot = document.createElement('div'), slide = slides[i];
@@ -196,6 +199,7 @@ BigSlider.prototype.init = function () {
         });
     });
 
+	this.gotoSlide(this.current, true);
 	this.observe();
 };
 
@@ -239,20 +243,18 @@ BigSlider.prototype.loadImages = function () {
  * Set up mutation observer
  */
 BigSlider.prototype.observe = function () {
-	var _this = this, config = {attributes: true},
+	var _this = this, config = {attributes: true, attributeFilter: ['current'], attributeOldValue: true},
 		callback = function(list, observer) {
 			for (var i = 0; i < list.length; i ++) {
 				var mutation = list[i];
-				if (mutation.type === 'attributes') {
-					switch (mutation.attributeName) {
-						case 'current':
-							var value = parseInt(mutation.target.getAttribute('current'));
-							if (!isNaN(value) && value !== this.current) {
-								_this.gotoSlide(value);
-							}
-							break;
-						default:
-							break;
+				if (
+					mutation.type === 'attributes' &&
+					mutation.attributeName === 'current' &&
+					mutation.target.getAttribute('current') !== mutation.oldValue
+				) {
+					var value = parseInt(mutation.target.getAttribute('current'));
+					if (!isNaN(value) && value !== this.current) {
+						_this.gotoSlide(value);
 					}
 				}
 			}
@@ -264,12 +266,14 @@ BigSlider.prototype.observe = function () {
 BigSlider.prototype.setDisplay = function (cb) {
     var current_point = this.getCurrentPoint();
 	for (var i in this.slides) {
-		var each = this.slides[i], slide = each.el, imgs = slide.querySelectorAll('img');
+		var each = this.slides[i];
+		var slide = each.el, imgs = slide.querySelectorAll('img');
 		for (var m = 0; m < imgs.length; m ++) {
-			if (parseInt(imgs[m].getAttribute('point')) !== current_point) {
-				imgs[m].style.display = 'none';
+			var img = imgs[m];
+			if (parseInt(img.getAttribute('point')) !== current_point) {
+				img.style.display = 'none';
             } else {
-				imgs[m].style.display = 'block';
+				img.style.display = 'block';
 			}
         }
 	}
@@ -298,6 +302,7 @@ BigSlider.prototype.setTimer = function () {
 			if (percentage < 0) percentage = 0;
 			bar.style.width = percentage + '%';
 			if (now - _this.current_time > _this.autoplay) {
+				console.log('i m called');
 				_this.gotoSlide(_this.current + 1);
 			}
 		}
