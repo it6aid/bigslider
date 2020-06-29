@@ -16,6 +16,7 @@ function BigSlider (selector) {
 	this.break_points = [];
 	this.current = 0;
 	this.current_time = new Date().getTime();
+	this.match_proportion = false;
 	this.moving = false;
 	this.use_indicator = false;
 	this.use_navigation = false;
@@ -36,6 +37,10 @@ function BigSlider (selector) {
 			console.warn('autoplay must be greater than 1000');
         }
     }
+
+	if (this.slider.getAttribute('match-proportion') !== null && this.slider.getAttribute('match-proportion') === '1') {
+		this.match_proportion = true;
+	}
 
 	if (this.slider.getAttribute('current') !== null && !isNaN(this.slider.getAttribute('current'))) {
 		this.current = parseInt(this.slider.getAttribute('current'));
@@ -216,7 +221,7 @@ BigSlider.prototype.loadImage = function (point, src, slide, cb) {
         el.setAttribute('data-ratio', this.width / this.height);
         el.src = src;
         slide.classList.remove('not-ready');
-        cb ? cb() : null;
+        cb ? cb(this.height, this.width) : null;
     };
     img.src = src;
 };
@@ -245,24 +250,13 @@ BigSlider.prototype.loadImages = function () {
  * Set up mutation observer
  */
 BigSlider.prototype.observe = function () {
-	var _this = this, config = {attributes: true, attributeFilter: ['current'], attributeOldValue: true},
-		callback = function(list, observer) {
-			for (var i = 0; i < list.length; i ++) {
-				var mutation = list[i];
-				if (
-					mutation.type === 'attributes' &&
-					mutation.attributeName === 'current' &&
-					mutation.target.getAttribute('current') !== mutation.oldValue
-				) {
-					var value = parseInt(mutation.target.getAttribute('current'));
-					if (!isNaN(value) && value !== this.current) {
-						_this.gotoSlide(value);
-					}
-				}
-			}
-		},
-		observer = new MutationObserver(callback);
-	observer.observe(this.slider, config);
+	var _this = this;
+	var _id = setInterval(function () {
+		if (!isNaN(parseInt(_this.slider.getAttribute('current'))) && parseInt(_this.slider.getAttribute('current')) !== _this.current) {
+			_this.gotoSlide(parseInt(_this.slider.getAttribute('current')));
+			_this.current = parseInt(_this.slider.getAttribute('current'));
+		}
+	}, 100);
 };
 
 BigSlider.prototype.setDisplay = function (cb) {

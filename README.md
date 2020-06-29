@@ -1,7 +1,9 @@
-# BigSlider 1.0.6
+# BigSlider 1.0.7
 Simple responsive slider
 
 # Changes
+### 1.0.6 - 1.0.7
+Replace mutation observer (IE 10 doesn't support) with interval check
 ### 1.0.5 - 1.0.6
 - Fix memory leaks from a global variable
 - Remove logs
